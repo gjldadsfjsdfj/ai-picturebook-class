@@ -1,585 +1,536 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI로 4주 만에 내 동화책 출판하기</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --cream:#FDFAF5;
-      --coral:#FF6040;
-      --coral-light:#FF8060;
-      --peach:#FFEEE8;
-      --yellow:#FFD166;
-      --yellow-light:#FFF6DC;
-      --sage:#C8E6C9;
-      --dark:#1E1E1E;
-      --mid:#555;
-      --border:#F0E8E0;
-    }
-    html{scroll-behavior:smooth}
-    body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--dark);line-height:1.6;overflow-x:hidden}
-
-    /* ── ANNOUNCEMENT BAR ── */
-    .bar{background:var(--dark);color:var(--yellow);text-align:center;padding:9px 16px;font-size:12px;font-weight:700;letter-spacing:.06em}
-    .bar span{color:#fff;margin:0 6px}
-
-    /* ── HERO ── */
-    .hero{position:relative;padding:52px 24px 64px;overflow:hidden;background:var(--cream)}
-    .hero-blob{position:absolute;top:-80px;right:-80px;width:340px;height:340px;background:var(--peach);border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;z-index:0;opacity:.7}
-    .hero-blob2{position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:var(--yellow-light);border-radius:40% 60% 30% 70% / 60% 40% 60% 40%;z-index:0;opacity:.8}
-    .hero-inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
-    .hero-stamp{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--border);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--coral);margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-    .hero-stamp::before{content:'✦';font-size:10px}
-    .hero h1{font-size:36px;font-weight:900;line-height:1.25;margin-bottom:10px;letter-spacing:-.02em}
-    .hero h1 .line2{color:var(--coral)}
-    .hero-wave{display:block;width:120px;height:8px;margin:0 0 18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8'%3E%3Cpath d='M0 4 Q15 0 30 4 Q45 8 60 4 Q75 0 90 4 Q105 8 120 4' stroke='%23FFD166' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/contain}
-    .hero-sub{font-size:16px;color:var(--mid);line-height:1.8;margin-bottom:28px}
-    .hero-stories{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
-    .hero-story{background:#fff;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,.07);border:1.5px solid var(--border)}
-    .story-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-    .story-icon.orange{background:var(--peach)}
-    .story-icon.yellow{background:var(--yellow-light)}
-    .story-text{font-size:13px;color:var(--dark);line-height:1.5;font-weight:500}
-    .story-text strong{color:var(--coral);font-weight:900}
-    .hero-cta-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
-    .btn-main{display:inline-flex;align-items:center;gap:8px;background:var(--coral);color:#fff;font-size:17px;font-weight:900;padding:16px 32px;border-radius:100px;text-decoration:none;box-shadow:0 8px 28px rgba(255,96,64,.35);transition:transform .2s,box-shadow .2s}
-    .btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,96,64,.45)}
-    .btn-main::after{content:'→';font-size:18px}
-    .hero-note{font-size:12px;color:#999;padding-left:4px}
-    .hero-img-area{margin-top:32px;position:relative}
-    .hero-img-box{width:100%;max-width:300px;margin:0 auto;aspect-ratio:9/16;background:var(--border);border-radius:24px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.15)}
-    .hero-img-box video{width:100%;height:100%;object-fit:cover;display:block}
-    .hero-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:13px;color:#bbb}
-    .hero-img-placeholder span{font-size:40px}
-    .hero-float-badge{position:absolute;bottom:-14px;right:16px;background:#fff;border-radius:16px;padding:10px 16px;box-shadow:0 8px 24px rgba(0,0,0,.1);display:flex;align-items:center;gap:8px;border:1.5px solid var(--border)}
-    .badge-dot{width:8px;height:8px;border-radius:50%;background:#4CAF50}
-    .badge-text{font-size:12px;font-weight:700;color:var(--dark)}
-
-    /* ── SECTION BASE ── */
-    .sec{padding:64px 24px;max-width:520px;margin:0 auto}
-    .sec-chip{display:inline-block;background:var(--yellow-light);color:#B8860B;font-size:11px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:14px;letter-spacing:.06em}
-    .sec-title{font-size:28px;font-weight:900;line-height:1.3;letter-spacing:-.02em;margin-bottom:8px}
-    .sec-desc{font-size:15px;color:var(--mid);line-height:1.8;margin-bottom:32px}
-    .wave-line{display:block;width:80px;height:6px;margin:10px 0 28px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 6'%3E%3Cpath d='M0 3 Q10 0 20 3 Q30 6 40 3 Q50 0 60 3 Q70 6 80 3' stroke='%23FF6040' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/contain}
-
-    /* ── INSTRUCTOR ── */
-    .inst-books{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-    .inst-book{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1)}
-    .inst-book img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
-    .inst-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:12px;font-weight:700;padding:20px 12px 10px;text-align:center}
-    .inst-story{background:var(--peach);border-radius:18px;padding:22px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
-    .inst-story-icon{font-size:32px;flex-shrink:0;line-height:1}
-    .inst-story-text{font-size:15px;color:var(--dark);line-height:1.85;font-weight:500}
-    .inst-creds{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-    .inst-cred{background:#fff;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:600;color:var(--dark);border:1.5px solid var(--border)}
-    .inst-quote{background:var(--peach);border-radius:16px;padding:18px 20px;font-size:14px;color:var(--dark);line-height:1.75;font-weight:500;text-align:center;border-left:4px solid var(--coral)}
-
-    /* ── PAIN ── */
-    .pain-wrap{background:#fff}
-    .pain-inner{max-width:520px;margin:0 auto;padding:64px 24px}
-    .pain-grid{display:flex;flex-direction:column;gap:12px}
-    .pain-card{border-radius:18px;padding:20px;display:flex;align-items:flex-start;gap:14px;position:relative;overflow:hidden}
-    .pain-card:nth-child(1){background:var(--peach)}
-    .pain-card:nth-child(2){background:var(--yellow-light)}
-    .pain-card:nth-child(3){background:#EEF5FF}
-    .pain-card:nth-child(4){background:#F0F8F0}
-    .pain-num{font-size:32px;font-weight:900;color:rgba(0,0,0,.07);position:absolute;right:16px;bottom:8px;line-height:1}
-    .pain-emoji{font-size:26px;flex-shrink:0}
-    .pain-text{font-size:15px;color:var(--dark);line-height:1.65;font-weight:500}
-
-    /* ── SOLUTION ── */
-    .sol-cards{display:flex;flex-direction:column;gap:14px}
-    .sol-card{background:#fff;border-radius:20px;padding:22px 20px;display:flex;gap:16px;align-items:flex-start;box-shadow:0 4px 24px rgba(0,0,0,.06)}
-    .sol-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-    .sol-icon.a{background:var(--peach)}
-    .sol-icon.b{background:var(--yellow-light)}
-    .sol-icon.c{background:var(--sage)}
-    .sol-title{font-size:16px;font-weight:700;margin-bottom:5px}
-    .sol-desc{font-size:13px;color:var(--mid);line-height:1.6}
-
-    /* ── PROOF ── */
-    .proof-wrap{background:#fff}
-    .proof-inner{max-width:520px;margin:0 auto;padding:64px 24px}
-    .book-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
-    .book-featured{border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1)}
-    .book-featured img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-    .book-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
-    .book-row::-webkit-scrollbar{height:4px}
-    .book-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-    .book-row .book-card{flex:0 0 calc(25% - 8px);min-width:80px}
-    .book-card{border-radius:16px;aspect-ratio:3/4;overflow:hidden;position:relative;box-shadow:0 4px 16px rgba(0,0,0,.08)}
-    .book-card img{width:100%;height:100%;object-fit:cover}
-    .book-ph{width:100%;height:100%;background:var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;color:#bbb}
-    .book-ph span{font-size:28px}
-    .reviews-label{font-size:18px;font-weight:900;margin-bottom:16px}
-    .reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .review-card{background:var(--cream);border-radius:16px;overflow:hidden;border:1.5px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.06)}
-    .review-card img{width:100%;display:block}
-
-    /* ── CURRICULUM ── */
-    .curr-steps{display:flex;flex-direction:column;gap:0}
-    .curr-step{display:flex;gap:16px;align-items:flex-start;padding:12px 0;position:relative}
-    .curr-step::after{content:'';position:absolute;left:24px;top:58px;bottom:-12px;width:1.5px;background:linear-gradient(var(--border),var(--border));display:block}
-    .curr-step:last-child::after{display:none}
-    .step-dot{width:48px;height:48px;border-radius:14px;background:var(--coral);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
-    .step-dot .wk{font-size:8px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.08em}
-    .step-dot .num{font-size:20px;font-weight:900;color:#fff;line-height:1}
-    .step-body{flex:1;padding:4px 0}
-    .step-ttl{font-size:15px;font-weight:700;color:var(--coral);margin-bottom:4px}
-    .step-desc{font-size:14px;color:var(--mid);line-height:1.65}
-    .step-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-    .step-tag{background:var(--cream);border:1px solid var(--border);border-radius:100px;padding:3px 11px;font-size:11px;color:#777;font-weight:500}
-
-    /* ── BONUS ── */
-    .bonus-wrap{background:var(--dark)}
-    .bonus-inner{max-width:520px;margin:0 auto;padding:64px 24px}
-    .bonus-inner .sec-chip{background:rgba(255,209,102,.15);color:var(--yellow)}
-    .bonus-inner .sec-title{color:#fff}
-    .bonus-inner .sec-desc{color:rgba(255,255,255,.55)}
-    .bonus-inner .wave-line{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 6'%3E%3Cpath d='M0 3 Q10 0 20 3 Q30 6 40 3 Q50 0 60 3 Q70 6 80 3' stroke='%23FFD166' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")}
-    .bonus-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
-    .bonus-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:20px;display:flex;gap:14px;align-items:flex-start}
-    .b-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-    .b-icon.a{background:rgba(255,96,64,.25)}
-    .b-icon.b{background:rgba(255,209,102,.2)}
-    .b-icon.c{background:rgba(200,230,201,.15)}
-    .b-num{font-size:10px;font-weight:700;color:var(--yellow);letter-spacing:.1em;margin-bottom:3px}
-    .b-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:5px}
-    .b-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6}
-    .bonus-footer{background:rgba(255,209,102,.1);border:1.5px solid rgba(255,209,102,.25);border-radius:16px;padding:20px;text-align:center}
-    .bonus-footer p:first-child{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:6px}
-    .bonus-footer p:last-child{font-size:18px;font-weight:900;color:var(--yellow)}
-
-    /* ── OFFER ── */
-    .offer-wrap{position:relative;overflow:hidden}
-    .offer-blob{position:absolute;top:-100px;right:-80px;width:280px;height:280px;background:var(--peach);border-radius:50% 50% 40% 60% / 40% 50% 50% 60%;opacity:.5;z-index:0}
-    .offer-inner{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:64px 24px}
-    .urgency{background:var(--coral);color:#fff;border-radius:14px;padding:14px 18px;font-size:14px;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:8px}
-    .urgency::before{content:'🔥';flex-shrink:0}
-    .price-card{background:#fff;border-radius:24px;padding:32px 24px;box-shadow:0 12px 48px rgba(255,96,64,.12);margin-bottom:20px;border:2px solid var(--border)}
-    .price-original{font-size:16px;color:#bbb;text-decoration:line-through;text-align:center;margin-bottom:6px}
-    .price-badge-row{display:flex;justify-content:center;margin-bottom:8px}
-    .price-badge{background:var(--coral);color:#fff;font-size:12px;font-weight:700;padding:4px 14px;border-radius:100px}
-    .price-main{text-align:center;margin-bottom:6px}
-    .price-main .won{font-size:20px;font-weight:700;color:var(--coral)}
-    .price-main .amount{font-size:52px;font-weight:900;color:var(--coral);letter-spacing:-.02em}
-    .price-note{text-align:center;font-size:12px;color:#bbb;margin-bottom:28px}
-    .include-list{display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1.5px dashed var(--border)}
-    .inc-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--dark);font-weight:500}
-    .inc-dot{width:22px;height:22px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0}
-    .btn-apply{display:block;background:var(--coral);color:#fff;font-size:18px;font-weight:900;padding:18px;border-radius:16px;text-decoration:none;text-align:center;box-shadow:0 10px 32px rgba(255,96,64,.35);transition:transform .2s,box-shadow .2s}
-    .btn-apply:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(255,96,64,.45)}
-    .apply-sub{text-align:center;font-size:12px;color:#aaa;margin-top:10px}
-
-    /* ── FAQ ── */
-    .faq-list{display:flex;flex-direction:column;gap:8px}
-    .faq-item{background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid var(--border)}
-    .faq-q{width:100%;background:none;border:none;padding:18px 20px;text-align:left;font-size:15px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'Noto Sans KR',sans-serif}
-    .faq-q:hover{background:var(--cream)}
-    .faq-arr{color:var(--coral);font-size:14px;transition:transform .3s;flex-shrink:0}
-    .faq-item.open .faq-arr{transform:rotate(180deg)}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
-    .faq-item.open .faq-a{max-height:300px}
-    .faq-a-inner{padding:0 20px 18px;font-size:14px;color:var(--mid);line-height:1.75;border-top:1px solid var(--border);padding-top:14px}
-
-    /* ── FINAL CTA ── */
-    .final{background:var(--coral);padding:64px 24px;text-align:center;position:relative;overflow:hidden}
-    .final-blob{position:absolute;top:-60px;left:-60px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
-    .final-blob2{position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;background:rgba(255,255,255,.06);border-radius:50%}
-    .final-inner{position:relative;z-index:1;max-width:400px;margin:0 auto}
-    .final h2{font-size:28px;font-weight:900;color:#fff;line-height:1.35;margin-bottom:12px}
-    .final h2 mark{background:var(--yellow);color:var(--dark);padding:0 6px 2px;border-radius:6px}
-    .final-desc{font-size:15px;color:rgba(255,255,255,.85);line-height:1.8;margin-bottom:32px}
-    .btn-final{display:block;background:#fff;color:var(--coral);font-size:18px;font-weight:900;padding:18px;border-radius:16px;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.15);max-width:360px;margin:0 auto 20px;transition:transform .2s}
-    .btn-final:hover{transform:translateY(-2px)}
-    .final-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;font-size:12px;color:rgba(255,255,255,.75)}
-    .final-trust span::before{content:'✦ '}
-
-    /* ── FOOTER ── */
-    footer{background:var(--dark);color:rgba(255,255,255,.3);text-align:center;padding:24px;font-size:12px;line-height:2}
-
-    /* ── STICKY MOBILE CTA ── */
-    .sticky{display:none;position:fixed;bottom:0;left:0;right:0;padding:10px 16px;background:rgba(253,250,245,.96);backdrop-filter:blur(8px);box-shadow:0 -4px 20px rgba(0,0,0,.08);z-index:100}
-    .sticky a{display:block;background:var(--coral);color:#fff;text-align:center;font-size:16px;font-weight:900;padding:14px;border-radius:12px;text-decoration:none}
-
-    /* ── ANIMATION ── */
-    .fade{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-    .fade.on{opacity:1;transform:translateY(0)}
-
-    /* ── RESPONSIVE ── */
-    @media(max-width:479px){
-      .hero h1{font-size:30px}
-      .sec-title{font-size:24px}
-      .sticky{display:block}
-      body{padding-bottom:72px}
-    }
-    @media(min-width:480px){
-      .hero h1{font-size:38px}
-      .book-grid{grid-template-columns:repeat(3,1fr)}
-    }
-    @media(min-width:680px){
-      .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;max-width:760px}
-      .hero-cta-wrap{align-items:flex-start}
-      .sec,.bonus-inner,.offer-inner,.proof-inner,.pain-inner{max-width:760px}
-      .sol-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-      .sol-cards .sol-card:last-child{grid-column:1/-1}
-      .sol-cards .sol-card:last-child{grid-column:auto}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI로 4주 만에 내 동화책 출판하기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--cream:#FDFAF5;
+--coral:#FF6040;
+--coral-light:#FF8060;
+--peach:#FFEEE8;
+--yellow:#FFD166;
+--yellow-light:#FFF6DC;
+--sage:#C8E6C9;
+--dark:#1E1E1E;
+--mid:#555;
+--border:#F0E8E0;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--dark);line-height:1.6;overflow-x:hidden}
+.bar{background:var(--dark);color:var(--yellow);text-align:center;padding:9px 16px;font-size:12px;font-weight:700;letter-spacing:.06em}
+.bar span{color:#fff;margin:0 6px}
+.hero{position:relative;padding:52px 24px 64px;overflow:hidden;background:var(--cream)}
+.hero-blob{position:absolute;top:-80px;right:-80px;width:340px;height:340px;background:var(--peach);border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;z-index:0;opacity:.7}
+.hero-blob2{position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:var(--yellow-light);border-radius:40% 60% 30% 70% / 60% 40% 60% 40%;z-index:0;opacity:.8}
+.hero-inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
+.hero-stamp{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--border);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--coral);margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.hero-stamp::before{content:'✦';font-size:10px}
+.hero h1{font-size:36px;font-weight:900;line-height:1.25;margin-bottom:10px;letter-spacing:-.02em}
+.hero h1 .line2{color:var(--coral)}
+.hero-wave{display:block;width:120px;height:8px;margin:0 0 18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8'%3E%3Cpath d='M0 4 Q15 0 30 4 Q45 8 60 4 Q75 0 90 4 Q105 8 120 4' stroke='%23FFD166' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/contain}
+.hero-sub{font-size:16px;color:var(--mid);line-height:1.8;margin-bottom:28px}
+.hero-stories{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.hero-story{background:#fff;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,.07);border:1.5px solid var(--border)}
+.story-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.story-icon.orange{background:var(--peach)}
+.story-icon.yellow{background:var(--yellow-light)}
+.story-text{font-size:13px;color:var(--dark);line-height:1.5;font-weight:500}
+.story-text strong{color:var(--coral);font-weight:900}
+.hero-cta-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.btn-main{display:inline-flex;align-items:center;gap:8px;background:var(--coral);color:#fff;font-size:17px;font-weight:900;padding:16px 32px;border-radius:100px;text-decoration:none;box-shadow:0 8px 28px rgba(255,96,64,.35);transition:transform .2s,box-shadow .2s}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,96,64,.45)}
+.btn-main::after{content:'→';font-size:18px}
+.hero-note{font-size:12px;color:#999;padding-left:4px}
+.hero-img-area{margin-top:32px;position:relative}
+.hero-img-box{width:100%;max-width:300px;margin:0 auto;aspect-ratio:9/16;background:var(--border);border-radius:24px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.15)}
+.hero-img-box video{width:100%;height:100%;object-fit:cover;display:block}
+.hero-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:13px;color:#bbb}
+.hero-img-placeholder span{font-size:40px}
+.hero-float-badge{position:absolute;bottom:-14px;right:16px;background:#fff;border-radius:16px;padding:10px 16px;box-shadow:0 8px 24px rgba(0,0,0,.1);display:flex;align-items:center;gap:8px;border:1.5px solid var(--border)}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:#4CAF50}
+.badge-text{font-size:12px;font-weight:700;color:var(--dark)}
+.sec{padding:64px 24px;max-width:520px;margin:0 auto}
+.sec-chip{display:inline-block;background:var(--yellow-light);color:#B8860B;font-size:11px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:14px;letter-spacing:.06em}
+.sec-title{font-size:28px;font-weight:900;line-height:1.3;letter-spacing:-.02em;margin-bottom:8px}
+.sec-desc{font-size:15px;color:var(--mid);line-height:1.8;margin-bottom:32px}
+.wave-line{display:block;width:80px;height:6px;margin:10px 0 28px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 6'%3E%3Cpath d='M0 3 Q10 0 20 3 Q30 6 40 3 Q50 0 60 3 Q70 6 80 3' stroke='%23FF6040' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/contain}
+.inst-books{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.inst-book{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1)}
+.inst-book img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.inst-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:12px;font-weight:700;padding:20px 12px 10px;text-align:center}
+.inst-story{background:var(--peach);border-radius:18px;padding:22px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.inst-story-icon{font-size:32px;flex-shrink:0;line-height:1}
+.inst-story-text{font-size:15px;color:var(--dark);line-height:1.85;font-weight:500}
+.inst-creds{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.inst-cred{background:#fff;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:600;color:var(--dark);border:1.5px solid var(--border)}
+.inst-quote{background:var(--peach);border-radius:16px;padding:18px 20px;font-size:14px;color:var(--dark);line-height:1.75;font-weight:500;text-align:center;border-left:4px solid var(--coral)}
+.pain-wrap{background:#fff}
+.pain-inner{max-width:520px;margin:0 auto;padding:64px 24px}
+.pain-grid{display:flex;flex-direction:column;gap:12px}
+.pain-card{border-radius:18px;padding:20px;display:flex;align-items:flex-start;gap:14px;position:relative;overflow:hidden}
+.pain-card:nth-child(1){background:var(--peach)}
+.pain-card:nth-child(2){background:var(--yellow-light)}
+.pain-card:nth-child(3){background:#EEF5FF}
+.pain-card:nth-child(4){background:#F0F8F0}
+.pain-num{font-size:32px;font-weight:900;color:rgba(0,0,0,.07);position:absolute;right:16px;bottom:8px;line-height:1}
+.pain-emoji{font-size:26px;flex-shrink:0}
+.pain-text{font-size:15px;color:var(--dark);line-height:1.65;font-weight:500}
+.sol-cards{display:flex;flex-direction:column;gap:14px}
+.sol-card{background:#fff;border-radius:20px;padding:22px 20px;display:flex;gap:16px;align-items:flex-start;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.sol-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.sol-icon.a{background:var(--peach)}
+.sol-icon.b{background:var(--yellow-light)}
+.sol-icon.c{background:var(--sage)}
+.sol-title{font-size:16px;font-weight:700;margin-bottom:5px}
+.sol-desc{font-size:13px;color:var(--mid);line-height:1.6}
+.proof-wrap{background:#fff}
+.proof-inner{max-width:520px;margin:0 auto;padding:64px 24px}
+.book-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
+.book-featured{border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1)}
+.book-featured img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.book-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.book-row::-webkit-scrollbar{height:4px}
+.book-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.book-row .book-card{flex:0 0 calc(25% - 8px);min-width:80px}
+.book-card{border-radius:16px;aspect-ratio:3/4;overflow:hidden;position:relative;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.book-card img{width:100%;height:100%;object-fit:cover}
+.book-ph{width:100%;height:100%;background:var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;color:#bbb}
+.book-ph span{font-size:28px}
+.reviews-label{font-size:18px;font-weight:900;margin-bottom:16px}
+.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.review-card{background:var(--cream);border-radius:16px;overflow:hidden;border:1.5px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.review-card img{width:100%;display:block}
+.curr-steps{display:flex;flex-direction:column;gap:0}
+.curr-step{display:flex;gap:16px;align-items:flex-start;padding:12px 0;position:relative}
+.curr-step::after{content:'';position:absolute;left:24px;top:58px;bottom:-12px;width:1.5px;background:linear-gradient(var(--border),var(--border));display:block}
+.curr-step:last-child::after{display:none}
+.step-dot{width:48px;height:48px;border-radius:14px;background:var(--coral);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.step-dot .wk{font-size:8px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.08em}
+.step-dot .num{font-size:20px;font-weight:900;color:#fff;line-height:1}
+.step-body{flex:1;padding:4px 0}
+.step-ttl{font-size:15px;font-weight:700;color:var(--coral);margin-bottom:4px}
+.step-desc{font-size:14px;color:var(--mid);line-height:1.65}
+.step-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.step-tag{background:var(--cream);border:1px solid var(--border);border-radius:100px;padding:3px 11px;font-size:11px;color:#777;font-weight:500}
+.bonus-wrap{background:var(--dark)}
+.bonus-inner{max-width:520px;margin:0 auto;padding:64px 24px}
+.bonus-inner .sec-chip{background:rgba(255,209,102,.15);color:var(--yellow)}
+.bonus-inner .sec-title{color:#fff}
+.bonus-inner .sec-desc{color:rgba(255,255,255,.55)}
+.bonus-inner .wave-line{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 6'%3E%3Cpath d='M0 3 Q10 0 20 3 Q30 6 40 3 Q50 0 60 3 Q70 6 80 3' stroke='%23FFD166' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")}
+.bonus-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.bonus-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:20px;display:flex;gap:14px;align-items:flex-start}
+.b-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.b-icon.a{background:rgba(255,96,64,.25)}
+.b-icon.b{background:rgba(255,209,102,.2)}
+.b-icon.c{background:rgba(200,230,201,.15)}
+.b-num{font-size:10px;font-weight:700;color:var(--yellow);letter-spacing:.1em;margin-bottom:3px}
+.b-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:5px}
+.b-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6}
+.bonus-footer{background:rgba(255,209,102,.1);border:1.5px solid rgba(255,209,102,.25);border-radius:16px;padding:20px;text-align:center}
+.bonus-footer p:first-child{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:6px}
+.bonus-footer p:last-child{font-size:18px;font-weight:900;color:var(--yellow)}
+.offer-wrap{position:relative;overflow:hidden}
+.offer-blob{position:absolute;top:-100px;right:-80px;width:280px;height:280px;background:var(--peach);border-radius:50% 50% 40% 60% / 40% 50% 50% 60%;opacity:.5;z-index:0}
+.offer-inner{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:64px 24px}
+.urgency{background:var(--coral);color:#fff;border-radius:14px;padding:14px 18px;font-size:14px;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.urgency::before{content:'🔥';flex-shrink:0}
+.price-card{background:#fff;border-radius:24px;padding:32px 24px;box-shadow:0 12px 48px rgba(255,96,64,.12);margin-bottom:20px;border:2px solid var(--border)}
+.price-original{font-size:16px;color:#bbb;text-decoration:line-through;text-align:center;margin-bottom:6px}
+.price-badge-row{display:flex;justify-content:center;margin-bottom:8px}
+.price-badge{background:var(--coral);color:#fff;font-size:12px;font-weight:700;padding:4px 14px;border-radius:100px}
+.price-main{text-align:center;margin-bottom:6px}
+.price-main .won{font-size:20px;font-weight:700;color:var(--coral)}
+.price-main .amount{font-size:52px;font-weight:900;color:var(--coral);letter-spacing:-.02em}
+.price-note{text-align:center;font-size:12px;color:#bbb;margin-bottom:28px}
+.include-list{display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1.5px dashed var(--border)}
+.inc-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--dark);font-weight:500}
+.inc-dot{width:22px;height:22px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0}
+.btn-apply{display:block;background:var(--coral);color:#fff;font-size:18px;font-weight:900;padding:18px;border-radius:16px;text-decoration:none;text-align:center;box-shadow:0 10px 32px rgba(255,96,64,.35);transition:transform .2s,box-shadow .2s}
+.btn-apply:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(255,96,64,.45)}
+.apply-sub{text-align:center;font-size:12px;color:#aaa;margin-top:10px}
+.faq-list{display:flex;flex-direction:column;gap:8px}
+.faq-item{background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;padding:18px 20px;text-align:left;font-size:15px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'Noto Sans KR',sans-serif}
+.faq-q:hover{background:var(--cream)}
+.faq-arr{color:var(--coral);font-size:14px;transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-arr{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-item.open .faq-a{max-height:300px}
+.faq-a-inner{padding:0 20px 18px;font-size:14px;color:var(--mid);line-height:1.75;border-top:1px solid var(--border);padding-top:14px}
+.final{background:var(--coral);padding:64px 24px;text-align:center;position:relative;overflow:hidden}
+.final-blob{position:absolute;top:-60px;left:-60px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
+.final-blob2{position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;background:rgba(255,255,255,.06);border-radius:50%}
+.final-inner{position:relative;z-index:1;max-width:400px;margin:0 auto}
+.final h2{font-size:28px;font-weight:900;color:#fff;line-height:1.35;margin-bottom:12px}
+.final h2 mark{background:var(--yellow);color:var(--dark);padding:0 6px 2px;border-radius:6px}
+.final-desc{font-size:15px;color:rgba(255,255,255,.85);line-height:1.8;margin-bottom:32px}
+.btn-final{display:block;background:#fff;color:var(--coral);font-size:18px;font-weight:900;padding:18px;border-radius:16px;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.15);max-width:360px;margin:0 auto 20px;transition:transform .2s}
+.btn-final:hover{transform:translateY(-2px)}
+.final-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;font-size:12px;color:rgba(255,255,255,.75)}
+.final-trust span::before{content:'✦ '}
+footer{background:var(--dark);color:rgba(255,255,255,.3);text-align:center;padding:24px;font-size:12px;line-height:2}
+.sticky{display:none;position:fixed;bottom:0;left:0;right:0;padding:10px 16px;background:rgba(253,250,245,.96);backdrop-filter:blur(8px);box-shadow:0 -4px 20px rgba(0,0,0,.08);z-index:100}
+.sticky a{display:block;background:var(--coral);color:#fff;text-align:center;font-size:16px;font-weight:900;padding:14px;border-radius:12px;text-decoration:none}
+.fade{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade.on{opacity:1;transform:translateY(0)}
+.guest-lecture{background:var(--yellow-light);border:2px solid var(--yellow);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;align-items:flex-start}
+.guest-badge{background:var(--yellow);color:var(--dark);font-size:11px;font-weight:900;padding:3px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+.guest-text{font-size:13px;color:var(--dark);line-height:1.6;font-weight:500}
+.guest-text strong{color:#9A6600;font-weight:900}
+@media(max-width:479px){
+.hero h1{font-size:30px}
+.sec-title{font-size:24px}
+.sticky{display:block}
+body{padding-bottom:72px}
+}
+@media(min-width:480px){
+.hero h1{font-size:38px}
+.book-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:680px){
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;max-width:760px}
+.hero-cta-wrap{align-items:flex-start}
+.sec,.bonus-inner,.offer-inner,.proof-inner,.pain-inner{max-width:760px}
+.sol-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.sol-cards .sol-card:last-child{grid-column:1/-1}
+.sol-cards .sol-card:last-child{grid-column:auto}
+}
+</style>
 </head>
 <body>
-
-<!-- BAR -->
-<div class="bar">온라인 첫 수업 특가<span>·</span>이후 정가 35만원으로 인상 예정</div>
-
-<!-- ① HERO -->
+<div class="bar">정가 399,000원<span>·</span>온라인 첫 특가 250,000원 — 이번 기수 한정</div>
 <section class="hero">
-  <div class="hero-blob"></div>
-  <div class="hero-blob2"></div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-stamp">오프라인 검증 커리큘럼 — 온라인 첫 오픈</div>
-      <h1>글 못 써도<br>그림 못 그려도<br><span class="line2">AI로 4주 만에<br>동화책 출판</span></h1>
-      <span class="hero-wave"></span>
-      <p class="hero-sub">현장에서 검증된 수업을 이제 온라인으로<br>기획부터 실물책 수령까지</p>
-      <div class="hero-stories">
-        <div class="hero-story">
-          <div class="story-icon orange">📖</div>
-          <div class="story-text">AI 첫 사용 수강생, 4주 수강 후<br><strong>혼자 4권 추가 출판</strong></div>
-        </div>
-        <div class="hero-story">
-          <div class="story-icon yellow">🏆</div>
-          <div class="story-text">디자인 전공자도 선택한 커리큘럼<br><strong>동화책 공모전 도전 중</strong></div>
-        </div>
-      </div>
-      <div class="hero-cta-wrap">
-        <a href="#apply" class="btn-main">지금 신청하기</a>
-        <p class="hero-note">💻 온라인 ZOOM 실시간 수업</p>
-      </div>
-    </div>
-    <div class="hero-img-area">
-      <div class="hero-img-box">
-        <!-- ★ 영상 파일을 images/hero.mp4 로 저장하세요 -->
-        <video autoplay muted loop playsinline>
-          <source src="images/hero.mp4" type="video/mp4">
-          <source src="images/hero.mov" type="video/quicktime">
-          <div class="hero-img-placeholder"><span>📚</span>대표 영상</div>
-        </video>
-      </div>
-      <div class="hero-float-badge">
-        <div class="badge-dot"></div>
-        <div class="badge-text">실물책 출판까지 완성</div>
-      </div>
-    </div>
-  </div>
+<div class="hero-blob"></div>
+<div class="hero-blob2"></div>
+<div class="hero-inner">
+<div>
+<div class="hero-stamp">오프라인 검증 커리큘럼 — 온라인 첫 오픈</div>
+<h1>글 못 써도<br>그림 못 그려도<br><span class="line2">AI로 4주 만에<br>동화책 출판</span></h1>
+<span class="hero-wave"></span>
+<p class="hero-sub">현장에서 검증된 수업을 이제 온라인으로<br>기획부터 실물책 수령까지</p>
+<div class="hero-stories">
+<div class="hero-story">
+<div class="story-icon orange">📖</div>
+<div class="story-text">AI 첫 사용 수강생, 4주 수강 후<br><strong>혼자 4권 추가 출판</strong></div>
+</div>
+<div class="hero-story">
+<div class="story-icon yellow">🏆</div>
+<div class="story-text">디자인 전공자도 선택한 커리큘럼<br><strong>동화책 공모전 도전 중</strong></div>
+</div>
+</div>
+<div class="hero-cta-wrap">
+<a href="#apply" class="btn-main">지금 신청하기</a>
+<p class="hero-note">💻 온라인 ZOOM 실시간 수업</p>
+</div>
+</div>
+<div class="hero-img-area">
+<div class="hero-img-box">
+<video autoplay muted loop playsinline>
+<source src="images/hero.mp4" type="video/mp4">
+<source src="images/hero.mov" type="video/quicktime">
+<div class="hero-img-placeholder"><span>📚</span>대표 영상</div>
+</video>
+</div>
+<div class="hero-float-badge">
+<div class="badge-dot"></div>
+<div class="badge-text">실물책 출판까지 완성</div>
+</div>
+</div>
+</div>
 </section>
-
-<!-- ② PAIN -->
 <div class="pain-wrap">
-  <div class="pain-inner fade">
-    <div class="sec-chip">이런 고민 있으셨나요?</div>
-    <h2 class="sec-title">동화책 꿈꾸다<br>포기한 적 있으신가요?</h2>
-    <span class="wave-line"></span>
-    <div class="pain-grid">
-      <div class="pain-card">
-        <div class="pain-emoji">📝</div>
-        <div class="pain-text">"동화 아이디어는 있는데, 막상 글을 쓰려면 막막해요"</div>
-        <div class="pain-num">01</div>
-      </div>
-      <div class="pain-card">
-        <div class="pain-emoji">🎨</div>
-        <div class="pain-text">"그림 실력이 없어서 이미지 만드는 게 제일 걱정돼요"</div>
-        <div class="pain-num">02</div>
-      </div>
-      <div class="pain-card">
-        <div class="pain-emoji">🤖</div>
-        <div class="pain-text">"AI 써봤는데 결과물이 들쭉날쭉해서 책으로 못 만들겠더라고요"</div>
-        <div class="pain-num">03</div>
-      </div>
-      <div class="pain-card">
-        <div class="pain-emoji">📦</div>
-        <div class="pain-text">"PDF 말고 진짜 손에 쥘 수 있는 실물책이 갖고 싶어요"</div>
-        <div class="pain-num">04</div>
-      </div>
-    </div>
-  </div>
+<div class="pain-inner fade">
+<div class="sec-chip">이런 고민 있으셨나요?</div>
+<h2 class="sec-title">동화책 꿈꾸다<br>포기한 적 있으신가요?</h2>
+<span class="wave-line"></span>
+<div class="pain-grid">
+<div class="pain-card">
+<div class="pain-emoji">📝</div>
+<div class="pain-text">"동화 아이디어는 있는데, 막상 글을 쓰려면 막막해요"</div>
+<div class="pain-num">01</div>
 </div>
-
-<!-- ②-1 INSTRUCTOR -->
+<div class="pain-card">
+<div class="pain-emoji">🎨</div>
+<div class="pain-text">"그림 실력이 없어서 이미지 만드는 게 제일 걱정돼요"</div>
+<div class="pain-num">02</div>
+</div>
+<div class="pain-card">
+<div class="pain-emoji">🤖</div>
+<div class="pain-text">"AI 써봤는데 결과물이 들쭉날쭉해서 책으로 못 만들겠더라고요"</div>
+<div class="pain-num">03</div>
+</div>
+<div class="pain-card">
+<div class="pain-emoji">📦</div>
+<div class="pain-text">"PDF 말고 진짜 손에 쥘 수 있는 실물책이 갖고 싶어요"</div>
+<div class="pain-num">04</div>
+</div>
+</div>
+</div>
+</div>
 <div class="sec fade">
-  <div class="sec-chip">강사 소개</div>
-  <h2 class="sec-title">글·그림 디데이</h2>
-  <span class="wave-line"></span>
-
-  <div class="inst-story">
-    <div class="inst-story-icon">👩‍👧‍👦</div>
-    <p class="inst-story-text">두 아이의 엄마로, 아이들과 함께하는 평범한 일상 속에서 반짝이는 이야기들을 발견합니다.<br><br>아이들에게 꼭 들려주고 싶은 따뜻한 진심과 응원의 말을 동화로 짓고 있습니다.</p>
-  </div>
-
-  <div class="inst-books">
-    <div class="inst-book">
-      <img src="images/instructor1.jpg" alt="하늘을 나는 달팽이">
-      <div class="inst-label">첫 번째 책</div>
-    </div>
-    <div class="inst-book">
-      <img src="images/instructor2.jpg" alt="달빛 베이커리와 꿈빵">
-      <div class="inst-label">두 번째 책</div>
-    </div>
-  </div>
-
-  <div class="inst-creds">
-    <div class="inst-cred">🏆 스토리공모전 최우수상</div>
-    <div class="inst-cred">🎨 AiGrow Lab 그림책 워크숍 운영</div>
-    <div class="inst-cred">📚 AI 그림책 직접 출판 『하늘을 나는 달팽이』 외 다수</div>
-  </div>
+<div class="sec-chip">강사 소개</div>
+<h2 class="sec-title">글·그림 디데이</h2>
+<span class="wave-line"></span>
+<div class="inst-story">
+<div class="inst-story-icon">👩‍👧‍👦</div>
+<p class="inst-story-text">두 아이의 엄마로, 아이들과 함께하는 평범한 일상 속에서 반짝이는 이야기들을 발견합니다.<br><br>아이들에게 꼭 들려주고 싶은 따뜻한 진심과 응원의 말을 동화로 짓고 있습니다.</p>
 </div>
-
-<!-- ③ SOLUTION -->
+<div class="inst-books">
+<div class="inst-book">
+<img src="images/instructor1.jpg" alt="하늘을 나는 달팽이">
+<div class="inst-label">첫 번째 책</div>
+</div>
+<div class="inst-book">
+<img src="images/instructor2.jpg" alt="달빛 베이커리와 꿈빵">
+<div class="inst-label">두 번째 책</div>
+</div>
+</div>
+<div class="inst-creds">
+<div class="inst-cred">🏆 스토리공모전 최우수상</div>
+<div class="inst-cred">🎨 AiGrow Lab 그림책 워크숍 운영</div>
+<div class="inst-cred">📚 AI 그림책 직접 출판 『하늘을 나는 달팽이』 외 다수</div>
+</div>
+</div>
 <div class="sec fade">
-  <div class="sec-chip">이제 달라집니다</div>
-  <h2 class="sec-title">AI는 이제 작가의<br>가장 강력한 어시스턴트</h2>
-  <span class="wave-line"></span>
-  <div class="sol-cards">
-    <div class="sol-card">
-      <div class="sol-icon a">📚</div>
-      <div>
-        <div class="sol-title">전자책 아닌 진짜 실물책</div>
-        <div class="sol-desc">교보문고 POD로 실제 인쇄된 책을 손에 받아볼 수 있습니다</div>
-      </div>
-    </div>
-    <div class="sol-card">
-      <div class="sol-icon b">🤖</div>
-      <div>
-        <div class="sol-title">검증된 GPT봇 3종 제공</div>
-        <div class="sol-desc">스토리·이미지·검수까지 오프라인에서 검증된 봇을 그대로 사용</div>
-      </div>
-    </div>
-    <div class="sol-card">
-      <div class="sol-icon c">🚀</div>
-      <div>
-        <div class="sol-title">기획부터 출판까지 4회 완성</div>
-        <div class="sol-desc">실물책을 만든 수강생이 증명하는 커리큘럼입니다</div>
-      </div>
-    </div>
-  </div>
+<div class="sec-chip">이제 달라집니다</div>
+<h2 class="sec-title">AI는 이제 작가의<br>가장 강력한 어시스턴트</h2>
+<span class="wave-line"></span>
+<div class="sol-cards">
+<div class="sol-card">
+<div class="sol-icon a">📚</div>
+<div>
+<div class="sol-title">전자책 아닌 진짜 실물책</div>
+<div class="sol-desc">교보문고 POD로 실제 인쇄된 책을 손에 받아볼 수 있습니다</div>
 </div>
-
-<!-- ④ SOCIAL PROOF -->
+</div>
+<div class="sol-card">
+<div class="sol-icon b">🤖</div>
+<div>
+<div class="sol-title">검증된 GPT봇 4종 제공</div>
+<div class="sol-desc">스토리·이미지·스토리보드·검수까지 오프라인에서 검증된 봇을 그대로 사용</div>
+</div>
+</div>
+<div class="sol-card">
+<div class="sol-icon c">🚀</div>
+<div>
+<div class="sol-title">기획부터 출판까지 4회 완성</div>
+<div class="sol-desc">실물책을 만든 수강생이 증명하는 커리큘럼입니다</div>
+</div>
+</div>
+</div>
+</div>
 <div class="proof-wrap">
-  <div class="proof-inner fade">
-    <div class="sec-chip">실제 결과물</div>
-    <h2 class="sec-title">수강생들이<br>직접 만든 책입니다</h2>
-    <span class="wave-line"></span>
-
-    <div class="book-grid">
-      <div class="book-featured">
-        <img src="images/book2.jpg" alt="수강생 실물책 5권">
-      </div>
-      <div class="book-row">
-        <div class="book-card"><img src="images/book1.jpg" alt="유준이와 이상한 나침반"></div>
-        <div class="book-card"><img src="images/book3.jpg" alt="할머니 집 가는길"></div>
-        <div class="book-card"><img src="images/book4.jpg" alt="네가 어떤 모습이라 해도"></div>
-        <div class="book-card"><img src="images/instructor1.jpg" alt="하늘을 나는 달팽이"></div>
-        <div class="book-card"><img src="images/instructor2.jpg" alt="달빛 베이커리와 꿈빵"></div>
-      </div>
-    </div>
-
-    <div class="reviews-label">💬 수강생 카카오톡 후기</div>
-    <div class="reviews-grid">
-      <div class="review-card"><img src="images/review1.jpg" alt="수강생 후기 1"></div>
-      <div class="review-card"><img src="images/review2.jpg" alt="수강생 후기 2"></div>
-      <div class="review-card"><img src="images/review3.jpg" alt="수강생 후기 3"></div>
-      <div class="review-card"><img src="images/review4.jpg" alt="수강생 후기 4"></div>
-      <div class="review-card"><img src="images/review5.jpg" alt="수강생 후기 5"></div>
-    </div>
-  </div>
+<div class="proof-inner fade">
+<div class="sec-chip">실제 결과물</div>
+<h2 class="sec-title">수강생들이<br>직접 만든 책입니다</h2>
+<span class="wave-line"></span>
+<div class="book-grid">
+<div class="book-featured">
+<img src="images/book2.jpg" alt="수강생 실물책 5권">
 </div>
-
-<!-- ⑤ CURRICULUM -->
+<div class="book-row">
+<div class="book-card"><img src="images/book1.jpg" alt="유준이와 이상한 나침반"></div>
+<div class="book-card"><img src="images/book3.jpg" alt="할머니 집 가는길"></div>
+<div class="book-card"><img src="images/book4.jpg" alt="네가 어떤 모습이라 해도"></div>
+<div class="book-card"><img src="images/instructor1.jpg" alt="하늘을 나는 달팽이"></div>
+<div class="book-card"><img src="images/instructor2.jpg" alt="달빛 베이커리와 꿈빵"></div>
+</div>
+</div>
+<div class="reviews-label">💬 수강생 카카오톡 후기</div>
+<div class="reviews-grid">
+<div class="review-card"><img src="images/review1.jpg" alt="수강생 후기 1"></div>
+<div class="review-card"><img src="images/review2.jpg" alt="수강생 후기 2"></div>
+<div class="review-card"><img src="images/review3.jpg" alt="수강생 후기 3"></div>
+<div class="review-card"><img src="images/review4.jpg" alt="수강생 후기 4"></div>
+<div class="review-card"><img src="images/review5.jpg" alt="수강생 후기 5"></div>
+</div>
+</div>
+</div>
 <div class="sec fade">
-  <div class="sec-chip">4주 커리큘럼</div>
-  <h2 class="sec-title">4번 수업으로<br>출판까지 끝냅니다</h2>
-  <span class="wave-line"></span>
-  <p class="sec-desc">매주 토요일 오후 9시 · 온라인 ZOOM 실시간</p>
-  <div class="curr-steps">
-    <div class="curr-step">
-      <div class="step-dot"><div class="wk">WEEK</div><div class="num">1</div></div>
-      <div class="step-body">
-        <div class="step-ttl">오리엔테이션 + 스토리 집필 + 스타일 선택</div>
-        <div class="step-desc">동화 제작 전체 흐름 파악, 내 이야기 기획, ChatGPT로 스토리 완성, 그림 스타일 결정</div>
-        <div class="step-tags"><span class="step-tag">ChatGPT</span><span class="step-tag">스토리 GPT봇</span><span class="step-tag">스타일 선택</span></div>
-      </div>
-    </div>
-    <div class="curr-step">
-      <div class="step-dot"><div class="wk">WEEK</div><div class="num">2</div></div>
-      <div class="step-body">
-        <div class="step-ttl">AI 이미지 생성 + 캔바 업로드</div>
-        <div class="step-desc">컷별 이미지 프롬프트 작성, AI로 일관된 그림 생성, 캔바에 업로드해 레이아웃 구성</div>
-        <div class="step-tags"><span class="step-tag">이미지 AI</span><span class="step-tag">프레임 GPT봇</span><span class="step-tag">캔바</span></div>
-      </div>
-    </div>
-    <div class="curr-step">
-      <div class="step-dot"><div class="wk">WEEK</div><div class="num">3</div></div>
-      <div class="step-body">
-        <div class="step-ttl">캔바 글씨체 작업 + 교보 POD 안내</div>
-        <div class="step-desc">캔바에서 폰트 편집 및 본문 완성, 교보문고 바로가기 POD 출판 프로세스 전체 안내</div>
-        <div class="step-tags"><span class="step-tag">캔바 편집</span><span class="step-tag">교보 POD</span><span class="step-tag">본문 완성</span></div>
-      </div>
-    </div>
-    <div class="curr-step">
-      <div class="step-dot"><div class="wk">WEEK</div><div class="num">4</div></div>
-      <div class="step-body">
-        <div class="step-ttl">표지 제작 + 출판 신청 완료 🎉</div>
-        <div class="step-desc">앞뒤 표지 디자인 완성, 검수 GPT봇으로 최종 점검, 교보문고 출판 신청까지 동행</div>
-        <div class="step-tags"><span class="step-tag">표지 디자인</span><span class="step-tag">검수 GPT봇</span><span class="step-tag">출판 신청</span></div>
-      </div>
-    </div>
-  </div>
+<div class="sec-chip">4주 커리큘럼</div>
+<h2 class="sec-title">4번 수업으로<br>출판까지 끝냅니다</h2>
+<span class="wave-line"></span>
+<p class="sec-desc">매주 화요일 오전 10시 30분 · 6월 2일 시작 · 온라인 ZOOM 실시간</p>
+<div class="curr-steps">
+<div class="curr-step">
+<div class="step-dot"><div class="wk">WEEK</div><div class="num">1</div></div>
+<div class="step-body">
+<div class="step-ttl">오리엔테이션 + 스토리 집필 + 스타일 선택</div>
+<div class="step-desc">동화 제작 전체 흐름 파악, 내 이야기 기획, ChatGPT로 스토리 완성, 그림 스타일 결정</div>
+<div class="step-tags"><span class="step-tag">ChatGPT</span><span class="step-tag">스토리 GPT봇</span><span class="step-tag">스타일 선택</span></div>
 </div>
-
-<!-- ⑥ BONUS -->
+</div>
+<div class="curr-step">
+<div class="step-dot"><div class="wk">WEEK</div><div class="num">2</div></div>
+<div class="step-body">
+<div class="step-ttl">AI 이미지 생성 + 캔바 업로드</div>
+<div class="step-desc">컷별 이미지 프롬프트 작성, AI로 일관된 그림 생성, 캔바에 업로드해 레이아웃 구성</div>
+<div class="step-tags"><span class="step-tag">이미지 AI</span><span class="step-tag">프레임 GPT봇</span><span class="step-tag">캔바</span></div>
+</div>
+</div>
+<div class="curr-step">
+<div class="step-dot"><div class="wk">WEEK</div><div class="num">3</div></div>
+<div class="step-body">
+<div class="step-ttl">캔바 글씨체 작업 + 교보 POD 안내</div>
+<div class="step-desc">캔바에서 폰트 편집 및 본문 완성, 교보문고 바로가기 POD 출판 프로세스 전체 안내</div>
+<div class="step-tags"><span class="step-tag">캔바 편집</span><span class="step-tag">교보 POD</span><span class="step-tag">본문 완성</span></div>
+</div>
+</div>
+<div class="curr-step">
+<div class="step-dot"><div class="wk">WEEK</div><div class="num">4</div></div>
+<div class="step-body">
+<div class="step-ttl">표지 제작 + 출판 신청 완료 🎉</div>
+<div class="step-desc">앞뒤 표지 디자인 완성, 검수 GPT봇으로 최종 점검, 교보문고 출판 신청까지 동행</div>
+<div class="step-tags"><span class="step-tag">표지 디자인</span><span class="step-tag">검수 GPT봇</span><span class="step-tag">출판 신청</span></div>
+<div class="guest-lecture">
+<div class="guest-badge">★ 특강</div>
+<div class="guest-text"><strong>아인프로님</strong> — 그림책 이미지를 영상으로<br>완성된 그림책을 AI로 영상화하는 특별 수업</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="bonus-wrap">
-  <div class="bonus-inner fade">
-    <div class="sec-chip">🎁 수강생 전용 혜택</div>
-    <h2 class="sec-title">수강 신청 시<br>GPT봇 3종 즉시 제공</h2>
-    <span class="wave-line"></span>
-    <p class="sec-desc">수업에서만 쓰고 끝이 아닙니다. 평생 내 작업에 활용하세요.</p>
-    <div class="bonus-cards">
-      <div class="bonus-card">
-        <div class="b-icon a">✍️</div>
-        <div>
-          <div class="b-num">BONUS 01</div>
-          <div class="b-title">스토리 GPT봇</div>
-          <div class="b-desc">플롯 구성, 캐릭터 설정, 세계관 설계 — 아이디어만 있으면 이야기가 완성됩니다</div>
-        </div>
-      </div>
-      <div class="bonus-card">
-        <div class="b-icon b">🖼️</div>
-        <div>
-          <div class="b-num">BONUS 02</div>
-          <div class="b-title">스토리프레임 GPT봇</div>
-          <div class="b-desc">컷별 장면 자동 설계 + 이미지 생성 프롬프트. 일관된 그림체 유지의 핵심</div>
-        </div>
-      </div>
-      <div class="bonus-card">
-        <div class="b-icon c">🔍</div>
-        <div>
-          <div class="b-num">BONUS 03</div>
-          <div class="b-title">스토리 검수 GPT봇</div>
-          <div class="b-desc">문체 교정, 흐름 검토, 어린이 눈높이 맞춤 검수 — 출판 전 완성도를 높여줍니다</div>
-        </div>
-      </div>
-    </div>
-    <div class="bonus-footer">
-      <p>GPT봇 3종 + 4회 실시간 수업 전체 포함</p>
-      <p>이 모든 것이 온라인 첫 수업 특가 25만원 안에</p>
-    </div>
-  </div>
+<div class="bonus-inner fade">
+<div class="sec-chip">🎁 수강생 전용 혜택</div>
+<h2 class="sec-title">수강 신청 시<br>GPT봇 4종 즉시 제공</h2>
+<span class="wave-line"></span>
+<p class="sec-desc">수업에서만 쓰고 끝이 아닙니다. 평생 내 작업에 활용하세요.</p>
+<div class="bonus-cards">
+<div class="bonus-card">
+<div class="b-icon a">✍️</div>
+<div>
+<div class="b-num">BONUS 01</div>
+<div class="b-title">스토리 GPT봇</div>
+<div class="b-desc">플롯 구성, 캐릭터 설정, 세계관 설계 — 아이디어만 있으면 이야기가 완성됩니다</div>
 </div>
-
-<!-- ⑦ OFFER -->
+</div>
+<div class="bonus-card">
+<div class="b-icon b">🖼️</div>
+<div>
+<div class="b-num">BONUS 02</div>
+<div class="b-title">스토리프레임 GPT봇</div>
+<div class="b-desc">컷별 장면 자동 설계 + 이미지 생성 프롬프트. 일관된 그림체 유지의 핵심</div>
+</div>
+</div>
+<div class="bonus-card">
+<div class="b-icon c">🔍</div>
+<div>
+<div class="b-num">BONUS 03</div>
+<div class="b-title">스토리 검수 GPT봇</div>
+<div class="b-desc">문체 교정, 흐름 검토, 어린이 눈높이 맞춤 검수 — 출판 전 완성도를 높여줍니다</div>
+</div>
+</div>
+<div class="bonus-card">
+<div class="b-icon a">🎬</div>
+<div>
+<div class="b-num">BONUS 04 · 아인프로님 제공</div>
+<div class="b-title">영상 스토리보드 생성 GPT봇</div>
+<div class="b-desc">장면 흐름·구도·연출까지 설계 — 아인프로님이 직접 제공하시는 봇으로 영상화까지 이어집니다</div>
+</div>
+</div>
+</div>
+<div class="bonus-footer">
+<p>강사 제공 GPT봇 3종 + 아인프로님 특강 & 영상 스토리보드 GPT봇 + 4회 실시간 수업</p>
+<p>이 모든 것이 온라인 첫 수업 특가 25만원 안에</p>
+</div>
+</div>
+</div>
 <div class="offer-wrap" id="apply">
-  <div class="offer-blob"></div>
-  <div class="offer-inner fade">
-    <div class="sec-chip">💰 수강 신청</div>
-    <h2 class="sec-title">지금이 가장<br>저렴한 기회입니다</h2>
-    <span class="wave-line"></span>
-    <div class="urgency">온라인 첫 수업 특가 — 이후 정가 35만원으로 인상 예정</div>
-    <div class="price-card">
-      <div class="price-original">정가 350,000원</div>
-      <div class="price-badge-row"><div class="price-badge">온라인 첫 수업 특가</div></div>
-      <div class="price-main"><span class="won">₩</span><span class="amount">250,000</span></div>
-      <div class="price-note">이번 기수만 적용되는 특가입니다</div>
-      <div class="include-list">
-        <div class="inc-item"><div class="inc-dot">✓</div>4회 온라인 ZOOM 실시간 수업 (매주 토 오후 9시)</div>
-        <div class="inc-item"><div class="inc-dot">✓</div>스토리 GPT봇 (평생 사용)</div>
-        <div class="inc-item"><div class="inc-dot">✓</div>스토리프레임 GPT봇 (평생 사용)</div>
-        <div class="inc-item"><div class="inc-dot">✓</div>스토리 검수 GPT봇 (평생 사용)</div>
-        <div class="inc-item"><div class="inc-dot">✓</div>교보문고 POD 출판 신청 동행 가이드</div>
-        <div class="inc-item"><div class="inc-dot">✓</div>수업 녹화본 전체 제공</div>
-      </div>
-    </div>
-    <!-- ★ href 교체 -->
-    <a href="https://forms.gle/5bm2XmqSu7Hrr3GAA" class="btn-apply" target="_blank" rel="noopener">지금 수강 신청하기 →</a>
-    <p class="apply-sub">선착순 마감 · 신청 후 카카오 채널로 안내</p>
-  </div>
+<div class="offer-blob"></div>
+<div class="offer-inner fade">
+<div class="sec-chip">💰 수강 신청</div>
+<h2 class="sec-title">지금이 가장<br>저렴한 기회입니다</h2>
+<span class="wave-line"></span>
+<div class="urgency">정가 399,000원 → 첫 할인 300,000원 → 이번 기수 특가 <u>250,000원</u></div>
+<div class="price-card">
+<div class="price-original">정가 399,000원</div>
+<div class="price-badge-row"><div class="price-badge">6월 2일 시작 · 이번 기수 한정 특가</div></div>
+<div class="price-main"><span class="won">₩</span><span class="amount">250,000</span></div>
+<div class="price-note">이번 기수만 적용되는 특가입니다</div>
+<div class="include-list">
+<div class="inc-item"><div class="inc-dot">✓</div>4회 온라인 ZOOM 실시간 수업 (매주 화 오전 10시 30분 · 6월 2일 시작)</div>
+<div class="inc-item"><div class="inc-dot">✓</div>스토리 GPT봇</div>
+<div class="inc-item"><div class="inc-dot">✓</div>스토리프레임 GPT봇</div>
+<div class="inc-item"><div class="inc-dot">✓</div>영상 스토리보드 생성 GPT봇 (아인프로님 제공)</div>
+<div class="inc-item"><div class="inc-dot">✓</div>스토리 검수 GPT봇</div>
+<div class="inc-item"><div class="inc-dot">✓</div>아인프로님 특강 — 그림책 이미지 영상화</div>
+<div class="inc-item"><div class="inc-dot">✓</div>교보문고 POD 출판 신청 동행 가이드</div>
+<div class="inc-item"><div class="inc-dot">✓</div>수업 녹화본 전체 제공</div>
 </div>
-
-<!-- ⑧ FAQ -->
+</div>
+<a href="https://forms.gle/5bm2XmqSu7Hrr3GAA" class="btn-apply" target="_blank" rel="noopener">지금 수강 신청하기 →</a>
+<p class="apply-sub">선착순 마감 · 신청 후 카카오 채널로 안내</p>
+</div>
+</div>
 <div class="sec fade">
-  <div class="sec-chip">자주 묻는 질문</div>
-  <h2 class="sec-title">혹시 이런 게<br>걱정되시나요?</h2>
-  <span class="wave-line"></span>
-  <div class="faq-list">
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">AI를 전혀 못 써도 수강할 수 있나요?<span class="faq-arr">▼</span></button>
-      <div class="faq-a"><div class="faq-a-inner">네, 전혀 걱정 마세요. AI를 처음 쓰는 분 기준으로 설계된 수업입니다. ChatGPT 접속부터 GPT봇 사용법까지 하나씩 함께 진행합니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">그림을 직접 그려야 하나요?<span class="faq-arr">▼</span></button>
-      <div class="faq-a"><div class="faq-a-inner">아니요. 모든 이미지는 AI로 생성합니다. 그림 실력은 전혀 필요 없습니다. 원하는 분위기를 텍스트로 입력하면 AI가 이미지를 만들어줍니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">실물책이 진짜 서점에 올라가나요?<span class="faq-arr">▼</span></button>
-      <div class="faq-a"><div class="faq-a-inner">교보문고 POD 서비스를 통해 ISBN 등록 및 출판이 가능합니다. 가족·지인에게 선물하거나 직접 구매 가능한 링크를 받아볼 수 있습니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">수업 일정을 놓치면 어떻게 하나요?<span class="faq-arr">▼</span></button>
-      <div class="faq-a"><div class="faq-a-inner">수업 녹화본을 제공합니다. 실시간 참여를 권장하지만 부득이한 경우 녹화본으로 복습하실 수 있습니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">GPT봇 3종은 어떻게 받나요?<span class="faq-arr">▼</span></button>
-      <div class="faq-a"><div class="faq-a-inner">수강 신청 완료 후 카카오 채널을 통해 즉시 링크를 발송해드립니다. ChatGPT 무료 계정만 있으면 바로 사용 가능합니다.</div></div>
-    </div>
-  </div>
+<div class="sec-chip">자주 묻는 질문</div>
+<h2 class="sec-title">혹시 이런 게<br>걱정되시나요?</h2>
+<span class="wave-line"></span>
+<div class="faq-list">
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">AI를 전혀 못 써도 수강할 수 있나요?<span class="faq-arr">▼</span></button>
+<div class="faq-a"><div class="faq-a-inner">네, 전혀 걱정 마세요. AI를 처음 쓰는 분 기준으로 설계된 수업입니다. ChatGPT 접속부터 GPT봇 사용법까지 하나씩 함께 진행합니다.</div></div>
 </div>
-
-<!-- ⑨ FINAL CTA -->
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">그림을 직접 그려야 하나요?<span class="faq-arr">▼</span></button>
+<div class="faq-a"><div class="faq-a-inner">아니요. 모든 이미지는 AI로 생성합니다. 그림 실력은 전혀 필요 없습니다. 원하는 분위기를 텍스트로 입력하면 AI가 이미지를 만들어줍니다.</div></div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">실물책이 진짜 서점에 올라가나요?<span class="faq-arr">▼</span></button>
+<div class="faq-a"><div class="faq-a-inner">교보문고 POD 서비스를 통해 ISBN 등록 및 출판이 가능합니다. 가족·지인에게 선물하거나 직접 구매 가능한 링크를 받아볼 수 있습니다.</div></div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">수업 일정을 놓치면 어떻게 하나요?<span class="faq-arr">▼</span></button>
+<div class="faq-a"><div class="faq-a-inner">수업 녹화본을 제공합니다. 실시간 참여를 권장하지만 부득이한 경우 녹화본으로 복습하실 수 있습니다.</div></div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">GPT봇 3종은 어떻게 받나요?<span class="faq-arr">▼</span></button>
+<div class="faq-a"><div class="faq-a-inner">수강 신청 완료 후 카카오 채널을 통해 즉시 링크를 발송해드립니다. ChatGPT 무료 계정만 있으면 바로 사용 가능합니다.</div></div>
+</div>
+</div>
+</div>
 <section class="final">
-  <div class="final-blob"></div>
-  <div class="final-blob2"></div>
-  <div class="final-inner">
-    <h2>4주 뒤,<br><mark>내 이름이 적힌 책</mark>을<br>손에 들고 싶다면</h2>
-    <p class="final-desc">상상만 하던 동화 작가의 꿈,<br>AI가 현실로 만들어드립니다.</p>
-    <!-- ★ href 교체 -->
-    <a href="https://forms.gle/5bm2XmqSu7Hrr3GAA" class="btn-final" target="_blank" rel="noopener">지금 수강 신청하기 →</a>
-    <div class="final-trust">
-      <span>온라인 ZOOM</span>
-      <span>선착순 마감</span>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>문의: 카카오 채널 또는 이메일</p>
-  <p>© 2025 AI 동화책 클래스. All rights reserved.</p>
-</footer>
-
-<!-- STICKY MOBILE CTA -->
-<div class="sticky" id="sticky">
-  <!-- ★ href 교체 -->
-  <a href="https://forms.gle/5bm2XmqSu7Hrr3GAA" target="_blank" rel="noopener">🎯 온라인 첫 수업 신청 — 특가 25만원</a>
+<div class="final-blob"></div>
+<div class="final-blob2"></div>
+<div class="final-inner">
+<h2>4주 뒤,<br><mark>내 이름이 적힌 책</mark>을<br>손에 들고 싶다면</h2>
+<p class="final-desc">상상만 하던 동화 작가의 꿈,<br>AI가 현실로 만들어드립니다.</p>
+<a href="https://forms.gle/5bm2XmqSu7Hrr3GAA" class="btn-final" target="_blank" rel="noopener">지금 수강 신청하기 →</a>
+<div class="final-trust">
+<span>온라인 ZOOM</span>
+<span>선착순 마감</span>
 </div>
-
+</div>
+</section>
+<footer>
+<p>문의: 카카오 채널 또는 이메일</p>
+<p>© 2025 AI 동화책 클래스. All rights reserved.</p>
+</footer>
+<div class="sticky" id="sticky">
+<a href="https://forms.gle/5bm2XmqSu7Hrr3GAA" target="_blank" rel="noopener">🎯 온라인 첫 수업 신청 — 특가 25만원</a>
+</div>
 <script>
-  function toggleFaq(btn){
-    const item=btn.closest('.faq-item'),isOpen=item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(el=>el.classList.remove('open'));
-    if(!isOpen)item.classList.add('open');
-  }
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')});
-  },{threshold:.08});
-  document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
-  const sticky=document.getElementById('sticky');
-  const hero=document.querySelector('.hero');
-  window.addEventListener('scroll',()=>{
-    sticky.style.display=hero.getBoundingClientRect().bottom<0?'block':'none';
-  },{passive:true});
+function toggleFaq(btn){
+const item=btn.closest('.faq-item'),isOpen=item.classList.contains('open');
+document.querySelectorAll('.faq-item').forEach(el=>el.classList.remove('open'));
+if(!isOpen)item.classList.add('open');
+}
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')});
+},{threshold:.08});
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+const sticky=document.getElementById('sticky');
+const hero=document.querySelector('.hero');
+window.addEventListener('scroll',()=>{
+sticky.style.display=hero.getBoundingClientRect().bottom<0?'block':'none';
+},{passive:true});
 </script>
 </body>
 </html>
