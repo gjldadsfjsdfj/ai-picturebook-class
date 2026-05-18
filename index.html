@@ -47,8 +47,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--d
 .btn-main::after{content:'→';font-size:18px}
 .hero-note{font-size:12px;color:#999;padding-left:4px}
 .hero-img-area{margin-top:32px;position:relative}
-.hero-img-box{width:100%;max-width:300px;margin:0 auto;aspect-ratio:9/16;background:var(--border);border-radius:24px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.15)}
-.hero-img-box video{width:100%;height:100%;object-fit:cover;display:block}
+.hero-img-box{width:100%;max-width:480px;margin:0 auto;aspect-ratio:16/9;background:var(--border);border-radius:24px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.15)}
+.hero-img-box iframe{width:100%;height:100%;border:none;display:block}
 .hero-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:13px;color:#bbb}
 .hero-img-placeholder span{font-size:40px}
 .hero-float-badge{position:absolute;bottom:-14px;right:16px;background:#fff;border-radius:16px;padding:10px 16px;box-shadow:0 8px 24px rgba(0,0,0,.1);display:flex;align-items:center;gap:8px;border:1.5px solid var(--border)}
@@ -231,11 +231,7 @@ body{padding-bottom:72px}
 </div>
 <div class="hero-img-area">
 <div class="hero-img-box">
-<video autoplay muted loop playsinline>
-<source src="images/hero.mp4" type="video/mp4">
-<source src="images/hero.mov" type="video/quicktime">
-<div class="hero-img-placeholder"><span>📚</span>대표 영상</div>
-</video>
+<iframe src="https://drive.google.com/file/d/1caXfKo9La-pnDa06stSCWlA5KAvSBvIG/preview" allow="autoplay"></iframe>
 </div>
 <div class="hero-float-badge">
 <div class="badge-dot"></div>
